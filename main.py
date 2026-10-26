@@ -140,7 +140,7 @@ QPushButton.PresetPill {
     color: #374151;
     font-size: 11px;
     font-weight: 700;
-    padding: 6px 12px;
+    padding: 6px 7px;
 }
 QPushButton.PresetPill:hover {
     background-color: #ffffff;
@@ -433,6 +433,7 @@ class CursorMotionStudio(QMainWindow):
         self.duration_seconds: int = config.DEFAULT_TIMER_MINUTES * 60
         self.start_timestamp: float = 0.0
         self.is_running: bool = False
+        self.is_infinite: bool = False
         self.selected_mode: str = config.MODE_GENTLE
 
         self.mode_cards: dict[str, ModeCardWidget] = {}
@@ -512,8 +513,8 @@ class CursorMotionStudio(QMainWindow):
 
         # Preset Duration Pills
         preset_row = QHBoxLayout()
-        preset_row.setSpacing(6)
-        presets = [("15 Mins", 15), ("30 Mins", 30), ("1 Hour", 60), ("2 Hours", 120)]
+        preset_row.setSpacing(5)
+        presets = [("∞ Infinite", 0), ("15 Mins", 15), ("30 Mins", 30), ("1 Hour", 60), ("2 Hours", 120)]
         for label, val in presets:
             btn = QPushButton(label)
             btn.setProperty("class", "PresetPill")
@@ -535,10 +536,10 @@ class CursorMotionStudio(QMainWindow):
         timer_center_row.addStretch()
         timer_layout.addLayout(timer_center_row)
 
-        timer_hint = QLabel("CLICK START TO KEEP SYSTEM ACTIVE & AWAKE")
-        timer_hint.setStyleSheet("color: #4f46e5; font-size: 10px; font-weight: 700; letter-spacing: 0.5px;")
-        timer_hint.setAlignment(Qt.AlignCenter)
-        timer_layout.addWidget(timer_hint)
+        self.timer_hint = QLabel("CLICK START TO KEEP SYSTEM ACTIVE & AWAKE")
+        self.timer_hint.setStyleSheet("color: #4f46e5; font-size: 10px; font-weight: 700; letter-spacing: 0.5px;")
+        self.timer_hint.setAlignment(Qt.AlignCenter)
+        timer_layout.addWidget(self.timer_hint)
 
         # Progress bar
         self.progress_bar = QProgressBar()
@@ -684,9 +685,11 @@ class CursorMotionStudio(QMainWindow):
 
     def _on_timer_spin_changed(self, minutes: int):
         if not self.is_running:
+            self.is_infinite = False
             self.duration_seconds = minutes * 60
             self._update_timer_display(self.duration_seconds)
             self.progress_bar.setValue(100)
+            self.timer_hint.setText("CLICK START TO KEEP SYSTEM ACTIVE & AWAKE")
 
             # Update preset buttons state
             for val, btn in self.preset_buttons.items():
@@ -697,7 +700,20 @@ class CursorMotionStudio(QMainWindow):
 
     def _set_timer_preset(self, minutes: int):
         if not self.is_running:
-            self.timer_spin.setValue(minutes)
+            if minutes == 0:
+                self.is_infinite = True
+                self.timer_display.setText("∞ Infinite")
+                self.timer_hint.setText("INFINITE MODE • RUNS CONTINUOUSLY UNTIL YOU CLICK STOP")
+                self.progress_bar.setValue(100)
+
+                for val, btn in self.preset_buttons.items():
+                    btn.setProperty("selected", "true" if val == 0 else "false")
+                    btn.style().unpolish(btn)
+                    btn.style().polish(btn)
+            else:
+                self.is_infinite = False
+                self.timer_hint.setText("CLICK START TO KEEP SYSTEM ACTIVE & AWAKE")
+                self.timer_spin.setValue(minutes)
 
     def _update_timer_display(self, seconds_left: int):
         hrs = seconds_left // 3600
@@ -717,8 +733,16 @@ class CursorMotionStudio(QMainWindow):
             return
 
         self.is_running = True
-        self.duration_seconds = self.timer_spin.value() * 60
         self.start_timestamp = time.monotonic()
+
+        if self.is_infinite:
+            self.duration_seconds = 0
+            self.timer_display.setText("∞ 00:00:00")
+            self.timer_hint.setText("INFINITE MODE RUNNING • CLICK STOP OR PRESS ESC TO END")
+            self.progress_bar.setValue(100)
+        else:
+            self.duration_seconds = self.timer_spin.value() * 60
+            self.timer_hint.setText("COUNTDOWN ACTIVE • CLICK STOP OR PRESS ESC TO END")
 
         # Update UI Controls State
         self.start_btn.setEnabled(False)
@@ -756,29 +780,45 @@ class CursorMotionStudio(QMainWindow):
         self.start_btn.setEnabled(True)
         self.stop_btn.setEnabled(False)
         self.timer_spin.setEnabled(True)
-        self._update_timer_display(self.timer_spin.value() * 60)
-        self.progress_bar.setValue(100)
+
+        if self.is_infinite:
+            self.timer_display.setText("∞ Infinite")
+            self.timer_hint.setText("INFINITE MODE • RUNS CONTINUOUSLY UNTIL YOU CLICK STOP")
+            self.progress_bar.setValue(100)
+        else:
+            self._update_timer_display(self.timer_spin.value() * 60)
+            self.progress_bar.setValue(100)
+            self.timer_hint.setText("CLICK START TO KEEP SYSTEM ACTIVE & AWAKE")
+
         self._update_status("Stopped", "#e0e7ff", "#4338ca")
 
     def _on_timer_tick(self):
-        """Accurate monotonic countdown calculation."""
+        """Accurate monotonic countdown calculation or infinite elapsed counter."""
         if not self.is_running:
             return
 
-        elapsed = time.monotonic() - self.start_timestamp
-        remaining = self.duration_seconds - elapsed
-
-        if remaining <= 0:
-            # Time expired: automatically stop movement
-            self._update_timer_display(0)
-            self.progress_bar.setValue(0)
-            self._update_status("Completed", "#dbeafe", "#1e40af")
-            self.stop_motion()
+        if self.is_infinite:
+            elapsed = int(time.monotonic() - self.start_timestamp)
+            hrs = elapsed // 3600
+            mins = (elapsed % 3600) // 60
+            secs = elapsed % 60
+            self.timer_display.setText(f"∞ {hrs:02d}:{mins:02d}:{secs:02d}")
+            self.progress_bar.setValue(100)
         else:
-            sec_left = int(remaining)
-            self._update_timer_display(sec_left)
-            pct = int((remaining / self.duration_seconds) * 100)
-            self.progress_bar.setValue(max(0, min(100, pct)))
+            elapsed = time.monotonic() - self.start_timestamp
+            remaining = self.duration_seconds - elapsed
+
+            if remaining <= 0:
+                # Time expired: automatically stop movement
+                self._update_timer_display(0)
+                self.progress_bar.setValue(0)
+                self._update_status("Completed", "#dbeafe", "#1e40af")
+                self.stop_motion()
+            else:
+                sec_left = int(remaining)
+                self._update_timer_display(sec_left)
+                pct = int((remaining / self.duration_seconds) * 100)
+                self.progress_bar.setValue(max(0, min(100, pct)))
 
     def _on_worker_status(self, title: str, msg: str):
         if "Running" in title:
