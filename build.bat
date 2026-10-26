@@ -24,7 +24,7 @@ if exist "dist\exe\CursorMotionStudio.exe" del /f /q "dist\exe\CursorMotionStudi
 if exist "dist\CursorMotionStudio-Portable.zip" del /f /q "dist\CursorMotionStudio-Portable.zip"
 
 echo [*] Compiling standalone executable with PyInstaller...
-!PYTHON_EXE! -m PyInstaller --noconfirm --clean --onefile --windowed --name "CursorMotionStudio" --icon "assets/icons/app_icon.ico" --add-data "assets;assets" --add-data "qt.conf;." main.py
+!PYTHON_EXE! -m PyInstaller --noconfirm --clean --onefile --windowed --name "CursorMotionStudio" --icon "assets/icons/app_icon.ico" --add-data "assets;assets" main.py
 
 if %errorlevel% neq 0 (
     echo [!] Build failed during PyInstaller compilation.
@@ -37,7 +37,7 @@ copy /y "dist\CursorMotionStudio.exe" "dist\exe\CursorMotionStudio.exe"
 
 :: Package into portable ZIP
 echo [*] Generating portable ZIP archive...
-!PYTHON_EXE! -c "import os, zipfile; zip_path = os.path.join('dist', 'CursorMotionStudio-Portable.zip'); z = zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED); z.write(os.path.join('dist', 'exe', 'CursorMotionStudio.exe'), arcname='CursorMotionStudio.exe'); z.write('README.txt', arcname='README.txt'); z.write('qt.conf', arcname='qt.conf'); z.close(); print('Portable ZIP created at:', zip_path)"
+!PYTHON_EXE! -c "import os, zipfile; zip_path = os.path.join('dist', 'CursorMotionStudio-Portable.zip'); z = zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED); z.write(os.path.join('dist', 'exe', 'CursorMotionStudio.exe'), arcname='CursorMotionStudio.exe'); z.write('README.txt', arcname='README.txt'); z.close(); print('Portable ZIP created at:', zip_path)"
 
 echo ========================================================================
 echo [SUCCESS] Build completed successfully!

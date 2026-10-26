@@ -94,6 +94,11 @@ QFrame.GlassCard {
     border-radius: 16px;
 }
 
+QLabel {
+    border: none;
+    background: transparent;
+}
+
 /* Header Text */
 QLabel#AppMainTitle {
     color: #1e1b4b;
@@ -292,6 +297,7 @@ class ModeCardWidget(QFrame):
         self.update_visual_state()
 
     def _setup_ui(self):
+        self.setObjectName("ModeCardFrame")
         layout = QHBoxLayout(self)
         layout.setContentsMargins(12, 8, 12, 8)
         layout.setSpacing(12)
@@ -302,7 +308,7 @@ class ModeCardWidget(QFrame):
         self.icon_badge.setAlignment(Qt.AlignCenter)
         self.icon_badge.setStyleSheet(
             "font-size: 17px; background-color: rgba(99, 102, 241, 0.12); "
-            "border-radius: 17px;"
+            "border-radius: 17px; border: none;"
         )
         layout.addWidget(self.icon_badge)
 
@@ -312,11 +318,11 @@ class ModeCardWidget(QFrame):
         text_layout.setSpacing(2)
 
         self.title_label = QLabel(self.title)
-        self.title_label.setStyleSheet("color: #1e1b4b; font-size: 13px; font-weight: 700;")
+        self.title_label.setStyleSheet("color: #1e1b4b; font-size: 13px; font-weight: 700; border: none; background: transparent;")
         text_layout.addWidget(self.title_label)
 
         self.desc_label = QLabel(self.desc)
-        self.desc_label.setStyleSheet("color: #64748b; font-size: 10px; font-weight: 500;")
+        self.desc_label.setStyleSheet("color: #64748b; font-size: 10px; font-weight: 500; border: none; background: transparent;")
         self.desc_label.setWordWrap(True)
         text_layout.addWidget(self.desc_label)
 
@@ -331,14 +337,14 @@ class ModeCardWidget(QFrame):
         self.tag_pill = QLabel(self.tag)
         self.tag_pill.setStyleSheet(
             f"background-color: {self.tag_bg}; color: {self.tag_fg}; "
-            f"border-radius: 5px; font-size: 9px; font-weight: 700; padding: 2px 6px;"
+            f"border-radius: 5px; font-size: 9px; font-weight: 700; padding: 2px 6px; border: none;"
         )
         self.tag_pill.setAlignment(Qt.AlignCenter)
         right_layout.addWidget(self.tag_pill)
 
         self.radio_indicator = QLabel("○")
         self.radio_indicator.setAlignment(Qt.AlignCenter)
-        self.radio_indicator.setStyleSheet("color: #94a3b8; font-size: 14px; font-weight: 700;")
+        self.radio_indicator.setStyleSheet("color: #94a3b8; font-size: 14px; font-weight: 700; border: none; background: transparent;")
         right_layout.addWidget(self.radio_indicator)
 
         layout.addLayout(right_layout)
@@ -350,49 +356,55 @@ class ModeCardWidget(QFrame):
     def update_visual_state(self, is_hover: bool = False):
         if self.is_selected:
             self.setStyleSheet(
-                "QFrame { "
+                "QFrame#ModeCardFrame { "
                 "   background-color: #ffffff; "
                 "   border: 2px solid #6366f1; "
                 "   border-radius: 12px; "
-                "}"
+                "} "
+                "QLabel { border: none; background: transparent; }"
             )
             self.icon_badge.setStyleSheet(
                 "font-size: 17px; background-color: #e0e7ff; "
                 "border: 1px solid #c7d2fe; border-radius: 17px;"
             )
-            self.title_label.setStyleSheet("color: #4338ca; font-size: 13px; font-weight: 800;")
+            self.title_label.setStyleSheet("color: #4338ca; font-size: 13px; font-weight: 800; border: none; background: transparent;")
+            self.desc_label.setStyleSheet("color: #64748b; font-size: 10px; font-weight: 500; border: none; background: transparent;")
             self.radio_indicator.setText("●")
-            self.radio_indicator.setStyleSheet("color: #6366f1; font-size: 15px; font-weight: 800;")
+            self.radio_indicator.setStyleSheet("color: #6366f1; font-size: 15px; font-weight: 800; border: none; background: transparent;")
         elif is_hover:
             self.setStyleSheet(
-                "QFrame { "
+                "QFrame#ModeCardFrame { "
                 "   background-color: rgba(255, 255, 255, 0.94); "
                 "   border: 1.5px solid #818cf8; "
                 "   border-radius: 12px; "
-                "}"
+                "} "
+                "QLabel { border: none; background: transparent; }"
             )
             self.icon_badge.setStyleSheet(
                 "font-size: 17px; background-color: rgba(99, 102, 241, 0.16); "
-                "border-radius: 17px;"
+                "border-radius: 17px; border: none;"
             )
-            self.title_label.setStyleSheet("color: #312e81; font-size: 13px; font-weight: 700;")
+            self.title_label.setStyleSheet("color: #312e81; font-size: 13px; font-weight: 700; border: none; background: transparent;")
+            self.desc_label.setStyleSheet("color: #64748b; font-size: 10px; font-weight: 500; border: none; background: transparent;")
             self.radio_indicator.setText("○")
-            self.radio_indicator.setStyleSheet("color: #818cf8; font-size: 14px;")
+            self.radio_indicator.setStyleSheet("color: #818cf8; font-size: 14px; border: none; background: transparent;")
         else:
             self.setStyleSheet(
-                "QFrame { "
+                "QFrame#ModeCardFrame { "
                 "   background-color: rgba(255, 255, 255, 0.82); "
                 "   border: 1.5px solid rgba(255, 255, 255, 0.95); "
                 "   border-radius: 12px; "
-                "}"
+                "} "
+                "QLabel { border: none; background: transparent; }"
             )
             self.icon_badge.setStyleSheet(
                 "font-size: 17px; background-color: rgba(241, 245, 249, 0.9); "
-                "border-radius: 17px;"
+                "border-radius: 17px; border: none;"
             )
-            self.title_label.setStyleSheet("color: #1e1b4b; font-size: 13px; font-weight: 700;")
+            self.title_label.setStyleSheet("color: #1e1b4b; font-size: 13px; font-weight: 700; border: none; background: transparent;")
+            self.desc_label.setStyleSheet("color: #64748b; font-size: 10px; font-weight: 500; border: none; background: transparent;")
             self.radio_indicator.setText("○")
-            self.radio_indicator.setStyleSheet("color: #cbd5e1; font-size: 14px;")
+            self.radio_indicator.setStyleSheet("color: #cbd5e1; font-size: 14px; border: none; background: transparent;")
 
     def mousePressEvent(self, event: QMouseEvent):
         if event.button() == Qt.LeftButton:
