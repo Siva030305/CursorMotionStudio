@@ -1,7 +1,7 @@
 """Configuration module for Cursor Motion Studio."""
 
 APP_NAME = "Cursor Motion Studio"
-APP_VERSION = "1.0.0"
+APP_VERSION = "1.0.1"
 APP_DESCRIPTION = "Lightweight, offline Windows cursor motion controller"
 
 # Window geometry

@@ -2,7 +2,7 @@
 ; Generates a professional Windows Setup Wizard with desktop shortcut & uninstaller
 
 #define MyAppName "Cursor Motion Studio"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.0.1"
 #define MyAppPublisher "Cursor Motion Studio Open Source"
 #define MyAppURL "https://github.com"
 #define MyAppExeName "CursorMotionStudio.exe"
