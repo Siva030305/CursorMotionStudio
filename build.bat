@@ -23,8 +23,8 @@ if exist "dist\CursorMotionStudio.exe" del /f /q "dist\CursorMotionStudio.exe"
 if exist "dist\exe\CursorMotionStudio.exe" del /f /q "dist\exe\CursorMotionStudio.exe"
 if exist "dist\CursorMotionStudio-Portable.zip" del /f /q "dist\CursorMotionStudio-Portable.zip"
 
-echo [*] Compiling standalone executable with PyInstaller...
-!PYTHON_EXE! -m PyInstaller --noconfirm --clean --onefile --windowed --name "CursorMotionStudio" --icon "assets/icons/app_icon.ico" --add-data "assets;assets" main.py
+echo [*] Compiling standalone executable with PyInstaller and embedded Windows PE metadata...
+!PYTHON_EXE! -m PyInstaller --noconfirm --clean --onefile --windowed --name "CursorMotionStudio" --icon "assets/icons/app_icon.ico" --version-file "version_info.txt" --add-data "assets;assets" main.py
 
 if %errorlevel% neq 0 (
     echo [!] Build failed during PyInstaller compilation.

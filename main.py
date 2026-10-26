@@ -9,10 +9,6 @@ from __future__ import annotations
 import os
 import sys
 
-# Suppress DPI conflict warnings on Windows before PySide6 loads
-os.environ["QT_ENABLE_HIGHDPI_SCALING"] = "1"
-os.environ["QT_SCALE_FACTOR_ROUNDING_POLICY"] = "PassThrough"
-
 import time
 from typing import Optional
 
