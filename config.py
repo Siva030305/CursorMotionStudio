@@ -11,12 +11,12 @@ MIN_WINDOW_WIDTH = 420
 MIN_WINDOW_HEIGHT = 580
 
 # Cursor boundary & movement limits
-OPTIMAL_AVERAGE_RADIUS_PX = 7   # Smooth, natural average radius (strictly bounded <= 15)
-DEFAULT_RADIUS_PX = 7
+OPTIMAL_AVERAGE_RADIUS_PX = 12  # Smooth, fluid radius (strictly bounded <= 15)
+DEFAULT_RADIUS_PX = 12
 
 # Human interruption detection & auto-pause settings
 HUMAN_PAUSE_RESUME_DELAY_SEC = 5.0  # Resume after 5 seconds of human inactivity
-HUMAN_DISPLACEMENT_THRESHOLD_PX = 20  # Fast cursor shift detection threshold
+HUMAN_DISPLACEMENT_THRESHOLD_PX = 25  # Fast cursor shift detection threshold
 
 # Timer constraints (minutes)
 MIN_TIMER_MINUTES = 1
