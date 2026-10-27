@@ -165,10 +165,22 @@ class MotionCalculator:
         dy = r * math.cos(t * 28.0)
         return self.clamp(self.anchor_x + dx, self.anchor_y + dy)
 
+    def calculate_stealth(self, t: float) -> Tuple[int, int]:
+        """Mode: Ghost Stealth - Imperceptible 1-pixel micro-pulse every 10 seconds.
+        Appears completely still to human eyes while resetting Windows and Teams/Slack idle timers.
+        """
+        cycle = t % 10.0
+        # 1-pixel shift for 40ms (~2 frames) every 10 seconds, then returns to anchor
+        if cycle < 0.040:
+            return self.clamp(self.anchor_x + 1, self.anchor_y)
+        return self.clamp(self.anchor_x, self.anchor_y)
+
     def next_point(self, mode: str, t: float) -> Tuple[int, int]:
         """Dispatches to the selected mode calculation."""
         m = mode.strip().lower()
-        if "gentle" in m:
+        if "stealth" in m or "ghost" in m:
+            return self.calculate_stealth(t)
+        elif "gentle" in m:
             return self.calculate_gentle(t)
         elif "circle" in m:
             return self.calculate_circle(t)

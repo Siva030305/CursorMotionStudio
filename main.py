@@ -580,6 +580,7 @@ class CursorMotionStudio(QMainWindow):
             config.MODE_RANDOM,
             config.MODE_HORIZONTAL,
             config.MODE_SHAKE,
+            config.MODE_STEALTH,
         ]
 
         for m_key in mode_order:

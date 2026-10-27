@@ -6,7 +6,7 @@ APP_DESCRIPTION = "Lightweight, offline Windows cursor motion controller"
 
 # Window geometry
 WINDOW_WIDTH = 460
-WINDOW_HEIGHT = 650
+WINDOW_HEIGHT = 680
 MIN_WINDOW_WIDTH = 420
 MIN_WINDOW_HEIGHT = 580
 
@@ -29,13 +29,15 @@ MODE_RANDOM = "Random"
 MODE_CIRCLE = "Circle"
 MODE_GENTLE = "Gentle"
 MODE_HORIZONTAL = "Horizontal"
+MODE_STEALTH = "Stealth"
 
 ALL_MODES = [
-    MODE_SHAKE,
-    MODE_RANDOM,
-    MODE_CIRCLE,
     MODE_GENTLE,
+    MODE_CIRCLE,
+    MODE_RANDOM,
     MODE_HORIZONTAL,
+    MODE_SHAKE,
+    MODE_STEALTH,
 ]
 
 MODE_DESCRIPTIONS = {
@@ -44,6 +46,7 @@ MODE_DESCRIPTIONS = {
     MODE_RANDOM: "Organic pseudo-random drift bounded by radius",
     MODE_HORIZONTAL: "Smooth side-to-side sweep along the horizontal axis",
     MODE_SHAKE: "Fast micro-jitter oscillation around anchor point",
+    MODE_STEALTH: "Imperceptible 1px micro-nudge every 10s — 100% undetectable to humans",
 }
 
 MODE_DETAILS = {
@@ -86,6 +89,14 @@ MODE_DETAILS = {
         "tag_bg": "#fee2e2",
         "tag_fg": "#b91c1c",
         "desc": "Fast micro-jitter oscillation around anchor point",
+    },
+    MODE_STEALTH: {
+        "title": "Ghost Stealth",
+        "icon": "👻",
+        "tag": "INVISIBLE",
+        "tag_bg": "#f3e8ff",
+        "tag_fg": "#7e22ce",
+        "desc": "Imperceptible 1px micro-nudge every 10s — 100% undetectable to humans",
     },
 }
 
