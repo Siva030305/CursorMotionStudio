@@ -1,48 +1,58 @@
 ========================================================================
-                      CURSOR MOTION STUDIO v1.0.0
+                      CURSOR MOTION STUDIO v1.3.0
 ========================================================================
-A lightweight, offline desktop application for Windows 10 and Windows 11.
-Provides 5 bounded cursor movement modes, configurable countdown timer,
-emergency stop mechanisms, and an independent Technology Stack display.
+An ultra-smooth, premium desktop application for Windows 10 and 11.
+Provides 6 bounded cursor movement modes, a real-time motion preview
+canvas, 250 Hz hardware pacing, high-speed multipliers up to 6.0x,
+strictly 1-pixel imperceptible micro-shake, human-intervention auto-pause,
+and dual glassmorphism themes (Midnight Obsidian & Aurora Platinum).
 
 ------------------------------------------------------------------------
-1. FEATURES
+1. FEATURES & HIGHLIGHTS
 ------------------------------------------------------------------------
-• 5 Specialized Cursor Movement Modes:
-    1. Shake Mode      : Rapid, small jitter oscillation around anchor.
-    2. Random Mode     : Randomized organic wander bounded by radius.
-    3. Circle Mode     : Smooth continuous circular trajectory.
-    4. Gentle Mode     : Subtle, breathing drift.
-    5. Horizontal Mode : Side-to-side sweep along the horizontal axis.
+• 6 Specialized Cursor Movement Modes:
+    1. Circle Orbit        : Continuous circular orbital motion.
+    2. Horizontal Sweep    : Smooth side-to-side harmonic sweep.
+    3. Rapid Shake         : Dynamic high-frequency jitter tremor.
+    4. 1-Pixel Micro-Shake : Strictly 1-pixel micro-vibration; 100% imperceptible at distance.
+    5. Gentle Drift        : Slow, natural breathing Lissajous drift.
+    6. Random Wander       : Multi-octave continuous harmonic drift.
+
+• Real-Time Motion Preview Canvas:
+    - 60 FPS simulated trajectory before moving the physical cursor.
+    - Concentric safety reference rings (5px, 10px, ±15px limit).
+    - Glowing animated cursor vector and fading neon trail.
+    - Live HUD telemetry displaying dX, dY, and active speed multiplier.
+    - 0 physical clicks / simulated hardware keystrokes.
+
+• Speed Multiplier Engine:
+    - 1.0x Standard, 2.0x High, 3.5x Very High, 6.0x Maximum ⚡.
+    - 250 Hz hardware pacing loop (4ms tick) with Windows 1ms kernel timer.
+    - Dynamic delta-t accumulation: change speeds on-the-fly without jerks.
+
+• Strictly 1-Pixel Imperceptible Micro-Shake:
+    - Guaranteed Euclidean displacement never exceeds 1.0 pixel (dx² + dy² <= 1.0).
+    - Dominant-axis projection prevents diagonal sqrt(2) ≈ 1.41px integer overshoot.
+    - High-frequency micro-oscillation keeps the OS continuously awake.
+
+• Smart Human Intervention Detection & Auto-Pause:
+    - Detects when you physically move the mouse.
+    - Automatically pauses motion and safely resumes 5 seconds after you finish.
 
 • Safety & Motion Boundaries:
-    - Initial maximum radius: strictly capped at 15 pixels (default: 6px).
-    - Hard clamped to keep the cursor within screen boundaries.
-    - Zero simulated clicks or keystrokes: pure safe coordinate motion.
+    - Strictly bounded radius (<= 15px max).
+    - Clamped 2px away from screen edges to avoid failsafe false-triggers.
     - Emergency Stop: Press [ESC] or push cursor to any screen corner.
 
-• Configurable Countdown Timer:
-    - Adjustable from 1 to 120 minutes.
-    - Real-time digital MM:SS countdown with progress tracking.
-    - Automatically stops cursor movement when timer reaches 00:00.
-
-• Dedicated Technology Stack Display:
-    - Displayed as a separate, independent card in the user interface.
-    - Highlights: Python, PySide6, PyAutoGUI, and PyInstaller.
-
-• Ultra-Compact Form Factor:
-    - Tailored to approximately 325 × 540 pixels (matching Windows Calculator).
-    - Modern dark theme with high contrast and DPI scaling safety.
-
-• 100% Offline:
-    - Zero telemetry, zero internet connection required, zero cloud servers.
+• Dual Premium Themes:
+    - Midnight Obsidian Luxe (Dark) and Aurora Platinum Glass (Light).
 
 ------------------------------------------------------------------------
 2. RUNNING THE APPLICATION
 ------------------------------------------------------------------------
 Option A: Running Portable Executable (No Python Required)
 ---------------------------------------------------------
-1. Extract "CursorMotionStudio-Portable.zip" (or open dist/exe/).
+1. Extract "dist/CursorMotionStudio-Portable.zip" (or open dist/exe/).
 2. Double-click "CursorMotionStudio.exe".
 3. The application will launch immediately without any setup.
 
@@ -58,19 +68,9 @@ Option B: Running from Python Source
 3. BUILDING STANDALONE EXECUTABLE (.EXE & .ZIP)
 ------------------------------------------------------------------------
 To rebuild the standalone executable and portable ZIP package:
-1. Run:
-       build.bat
-2. The output files will be created in:
-       dist/exe/CursorMotionStudio.exe
-       dist/CursorMotionStudio-Portable.zip
+    build.bat
 
-------------------------------------------------------------------------
-4. KEYBOARD SHORTCUTS & EMERGENCY STOP
-------------------------------------------------------------------------
-• [ESC]            : Immediately stops cursor movement.
-• Screen Corners   : Moving the cursor to any of the 4 screen corners
-                     triggers PyAutoGUI FailSafe to immediately stop motion.
-
-========================================================================
-(C) 2026 Cursor Motion Studio. Developed for offline Windows environments.
+Outputs:
+    - Standalone EXE : dist\exe\CursorMotionStudio.exe
+    - Portable ZIP   : dist\CursorMotionStudio-Portable.zip
 ========================================================================

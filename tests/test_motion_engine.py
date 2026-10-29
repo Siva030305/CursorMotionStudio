@@ -41,6 +41,48 @@ class TestMotionCalculator(unittest.TestCase):
         self.assertLessEqual(cx, 97)
         self.assertLessEqual(cy, 97)
 
+    def test_circle_orbit_trajectory(self):
+        """Verify Circle mode generates a circular orbit."""
+        dx, dy = self.calc.get_relative_offset(config.MODE_CIRCLE, 0.0)
+        dist = math.hypot(dx, dy)
+        self.assertAlmostEqual(dist, self.radius, places=1)
+
+    def test_horizontal_sweep_trajectory(self):
+        """Verify Horizontal mode only moves along horizontal axis."""
+        for i in range(20):
+            t = i * 0.1
+            dx, dy = self.calc.get_relative_offset(config.MODE_HORIZONTAL, t)
+            self.assertEqual(dy, 0.0)
+            self.assertLessEqual(abs(dx), self.radius)
+
+    def test_stealth_strictly_1_pixel(self):
+        """Verify 1-Pixel Micro-Shake strictly never exceeds 1.0 pixel displacement."""
+        displacements = []
+        for i in range(100):
+            t = i * 0.01
+            dx, dy = self.calc.get_relative_offset(config.MODE_STEALTH, t)
+            dist_float = math.hypot(dx, dy)
+            # Mathematical offset must strictly equal 1.0 pixel
+            self.assertLessEqual(dist_float, 1.0001, f"Float offset exceeded 1.0px at t={t}: {dist_float}")
+            displacements.append(dist_float)
+
+            # Integer hardware screen coordinate must strictly never exceed 1.0 pixel
+            x, y = self.calc.next_point(config.MODE_STEALTH, t)
+            dist_int = math.hypot(x - self.anchor_x, y - self.anchor_y)
+            self.assertLessEqual(dist_int, 1.0001, f"Integer screen displacement exceeded 1px at t={t}: {dist_int}")
+
+        # Verify active oscillation (reaches 1.0px)
+        max_disp = max(displacements)
+        self.assertAlmostEqual(max_disp, 1.0, places=3)
+
+    def test_rapid_shake_bounded(self):
+        """Verify Rapid Shake is fast and strictly bounded."""
+        for i in range(50):
+            t = i * 0.02
+            dx, dy = self.calc.get_relative_offset(config.MODE_SHAKE, t)
+            dist = math.hypot(dx, dy)
+            self.assertLessEqual(dist, self.radius)
+
 
 if __name__ == "__main__":
     unittest.main()
